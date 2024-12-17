@@ -1,0 +1,24 @@
+<style>
+    .suggestions {
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        width: 100%;
+        z-index: 1000;
+    }
+    .suggestions div {
+        padding: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    .suggestions img {
+        width: 40px;
+        height: auto;
+    }
+    .suggestions div:hover {
+        background-color: #f8f9fa;
+    }
+</style>
