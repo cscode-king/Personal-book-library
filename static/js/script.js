@@ -66,4 +66,15 @@ document.querySelectorAll('a[href="#adding"]').forEach(link => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if the URL has the "scroll=true" query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('scroll') === 'true') {
+        // Scroll to the bottom of the page
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
+        // Remove the query parameter from the URL without reloading the page
+        const urlWithoutScroll = window.location.href.split('?')[0];
+        window.history.replaceState({}, document.title, urlWithoutScroll);
+    }
+});

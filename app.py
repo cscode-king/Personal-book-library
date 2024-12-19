@@ -8,9 +8,13 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = '4a5b2c7f8d6e9f0b3d1c4e5a6f7b8c9d'  
+app.secret_key = os.getenv("SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError("SECRET_KEY environment variable is not set!")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+if not app.config['SQLALCHEMY_DATABASE_URI']:
+    raise RuntimeError("DATABASE_URL environment variable is not set!")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -109,8 +113,7 @@ def add_book():
         flash('Book added successfully!', 'success')
     else:
         flash('Book not found.', 'danger')
-    return redirect(url_for('home'))
-
+    return redirect(url_for('home') + "?scroll=true")  # Add scroll query parameter
 
 @app.route('/delete/<int:book_id>', methods=['POST'])
 @login_required
@@ -121,8 +124,9 @@ def delete_book(book_id):
         return redirect(url_for('home'))
     db.session.delete(book)
     db.session.commit()
-    flash('Book deleted successfully.', 'success')
-    return redirect(url_for('home'))
+    flash('Book deleted successfully!', 'success')
+    return redirect(url_for('home') + "?scroll=true")  # Add scroll query parameter
+
 
 
 @app.route('/suggest', methods=['GET'])
