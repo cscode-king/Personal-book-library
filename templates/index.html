@@ -28,6 +28,11 @@
               <li class="nav-item me-5">
                 <a class="nav-link" href="#adding">Add Book</a>
               </li>
+              <li class="nav-item me-5">
+                <form class="nav-link" action="{{ url_for('logout') }}" method="POST" id="leave">
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
               
             </ul>
           </div>
@@ -39,7 +44,7 @@
         <div>
             <h1>Welcome to My Personal Library</h1>
             <p>A modern way to track your favorite books!</p>
-            <a href="#adding" class="btn btn-primary">Get Started</a>
+            <a href="#adding" class="btn btn-primary">Add a book</a>
         </div>
     </section>
         
@@ -52,7 +57,7 @@
             <div class="card shadow p-3 mb-4">
                 <form method="POST" action="/add" class="row g-3" autocomplete="off">
                     <div class="col-md-10 position-relative">
-                        <input type="text" id="book_name" name="book_name" class="form-control" placeholder="Enter Book Title" required>
+                        <input type="text" id="book_name" name="book_name" class="form-control" placeholder=" Enter Book Title" required>
                         <div id="suggestions" class="suggestions"></div> 
                     </div>
                     <div class="col-md-2">

@@ -50,7 +50,7 @@ def load_user(user_id):
 def signup():
     if request.method == 'POST':
         username = request.form['username']
-        password = generate_password_hash(request.form['password'], method='sha256')
+        password = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
         if User.query.filter_by(username=username).first():
             flash('Username already exists.', 'danger')
             return redirect(url_for('signup'))
@@ -75,15 +75,22 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('login'))
-
+    return redirect(url_for('intro'))
 
 @app.route('/')
+def intro():
+    
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    return render_template('intro.html')  
+
+@app.route('/home')
+
 @login_required
 def home():
     books = Book.query.filter_by(user_id=current_user.id).all()

@@ -11,10 +11,20 @@ body {
     box-shadow: none; 
 }
 
+#leave{
+    background-color: rgba(255, 255, 255, 0.8) !important; 
+    box-shadow: none; 
+}
+
 
 #adding {
     padding-top: 40px; 
-    margin-top: -50px; 
+    position: relative;
+    height: 100vh; 
+    display: flex;
+    text-align: center;
+    background: color(from color srgb r g b) ;
+
 }
 
 #intro {
@@ -85,8 +95,7 @@ body {
 .suggestions {
     position: absolute;
     background: white;
-    border: 1px solid #ccc;
-    max-height: 200px;
+    max-height: 500px;
     overflow-y: auto;
     width: 100%;
     z-index: 1000;
@@ -94,12 +103,6 @@ body {
 .suggestions div {
     padding: 8px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-.suggestions img {
-    width: 40px;
-    height: auto;
 }
 .suggestions div:hover {
     background-color: #f8f9fa;
