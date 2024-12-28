@@ -88,6 +88,7 @@ platformdirs==4.3.6
 prometheus_client==0.21.0
 prompt_toolkit==3.0.47
 psutil==6.0.0
+psycopg2-binary==2.9.10
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pyasn1==0.6.1
@@ -136,4 +137,3 @@ webcolors==24.8.0
 webencodings==0.5.1
 websocket-client==1.8.0
 Werkzeug==3.0.4
-psycopg2-binary==2.9.6
