@@ -7,23 +7,24 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
-if not app.secret_key:
+application = Flask(__name__)
+
+application.secret_key = os.getenv("SECRET_KEY")
+if not application.secret_key:
     raise RuntimeError("SECRET_KEY environment variable is not set!")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-if not app.config['SQLALCHEMY_DATABASE_URI']:
+application.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+if not application.config['SQLALCHEMY_DATABASE_URI']:
     raise RuntimeError("DATABASE_URL environment variable is not set!")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(application)
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.init_app(application)
 login_manager.login_view = 'login'
 
 from flask_migrate import Migrate
-migrate = Migrate(app, db)
+migrate = Migrate(application, db)
 
 
 # the google books API Key (it uses environment variables for security)
@@ -50,7 +51,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@application.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -66,7 +67,7 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -79,21 +80,21 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/logout', methods=['POST'])
+@application.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('intro'))
 
-@app.route('/')
+@application.route('/')
 def intro():
     
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     return render_template('intro.html')  
 
-@app.route('/home')
+@application.route('/home')
 
 @login_required
 def home():
@@ -101,7 +102,7 @@ def home():
     return render_template('index.html', books=books)
 
 
-@app.route('/add', methods=['POST'])
+@application.route('/add', methods=['POST'])
 @login_required
 def add_book():
     book_name = request.form['book_name']
@@ -115,7 +116,7 @@ def add_book():
         flash('Book not found.', 'danger')
     return redirect(url_for('home') + "?scroll=true")  # Add scroll query parameter
 
-@app.route('/delete/<int:book_id>', methods=['POST'])
+@application.route('/delete/<int:book_id>', methods=['POST'])
 @login_required
 def delete_book(book_id):
     book = Book.query.get_or_404(book_id)
@@ -129,7 +130,7 @@ def delete_book(book_id):
 
 
 
-@app.route('/suggest', methods=['GET'])
+@application.route('/suggest', methods=['GET'])
 def suggest():
     query = request.args.get('q')
     if query:
@@ -160,8 +161,9 @@ def get_book_metadata(book_name):
             return {"title": title, "cover_image": cover_image}
     return None
 
+
 if __name__ == "__main__":
     # it creates the database tables if they don't exist
-    with app.app_context():
+    with application.app_context():
         db.create_all()
-    app.run(debug=True)
+    application.run()
